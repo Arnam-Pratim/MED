@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Software Engineer</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #101827;
+            color: white;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: auto;
+        }
+
+        h1 {
+            color: #38bdf8;
+            text-align: center;
+        }
+
+        .card {
+            background: #1e293b;
+            padding: 22px;
+            margin-top: 20px;
+            border-radius: 12px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 6px;
+        }
+
+        button {
+            background: #0284c7;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px 0;
+        }
+
+        button:hover {
+            background: #0369a1;
+        }
+
+        .result {
+            line-height: 1.8;
+            margin-top: 15px;
+        }
+
+        .progress {
+            background: #334155;
+            height: 12px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #bar {
+            background: #22c55e;
+            height: 100%;
+            width: 0%;
+            transition: 0.4s;
+        }
+
+        .step {
+            padding: 10px;
+            background: #334155;
+            margin: 8px 0;
+            border-radius: 6px;
+        }
+
+        .step input {
+            width: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🤖 AI Software Engineer</h1>
+    <p style="text-align:center">
+        Your Smart AI Project Development Assistant
+    </p>
+
+    <div class="card">
+        <h2>🚀 Create Your Project</h2>
+
+        <input type="text" id="name"
+        placeholder="Enter your project name">
+
+        <select id="type">
+            <option value="">Select Project Type</option>
+            <option>Web Development</option>
+            <option>Artificial Intelligence</option>
+            <option>Machine Learning</option>
+            <option>Mobile Application</option>
+            <option>Data Analytics</option>
+        </select>
+
+        <button onclick="start()">Generate Project Plan</button>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <div class="card">
+        <h2>🧠 AI Technology Suggestions</h2>
+        <button onclick="suggest()">Suggest Technologies</button>
+        <div id="technology" class="result"></div>
+    </div>
+
+    <div class="card">
+        <h2>📊 Project Progress</h2>
+
+        <div class="progress">
+            <div id="bar"></div>
+        </div>
+
+        <h3 id="percentage">0% Completed</h3>
+
+        <div id="tasks"></div>
+    </div>
+
+    <div class="card">
+        <h2>💬 AI Assistant</h2>
+
+        <input type="text" id="question"
+        placeholder="Ask something about your project">
+
+        <button onclick="askAI()">Ask AI</button>
+
+        <div id="answer" class="result"></div>
+    </div>
+
+</div>
+
+<script>
+
+let projectType = "";
+
+function start() {
+
+    let project = document.getElementById("name").value;
+    projectType = document.getElementById("type").value;
+
+    if(project.trim() === "" || projectType === "") {
+        alert("Please enter project name and select project type!");
+        return;
+    }
+
+    document.getElementById("result").innerHTML =
+    "<h3>Project: " + project + "</h3>" +
+    "<p>Type: " + projectType + "</p>" +
+    "<h3>Development Roadmap</h3>" +
+    "1. Planning Project<br>" +
+    "2. Designing Architecture<br>" +
+    "3. Writing Code<br>" +
+    "4. Testing Code<br>" +
+    "5. Debugging Errors<br>" +
+    "6. Deploying Project<br>" +
+    "7. Project Completed";
+
+    document.getElementById("tasks").innerHTML = "";
+
+    let steps = [
+        "Project Planning",
+        "Architecture Design",
+        "Coding",
+        "Testing",
+        "Debugging",
+        "Deployment"
+    ];
+
+    steps.forEach((step, index) => {
+        document.getElementById("tasks").innerHTML +=
+        `<div class="step">
+        <input type="checkbox" onchange="updateProgress()">
+        ${step}
+        </div>`;
+    });
+
+    updateProgress();
+}
+
+function suggest() {
+
+    if(projectType === "") {
+        alert("Generate a project plan first!");
+        return;
+    }
+
+    let suggestions = {
+        "Web Development":
+        "HTML, CSS, JavaScript, React, Node.js",
+
+        "Artificial Intelligence":
+        "Python, TensorFlow, PyTorch, OpenAI API",
+
+        "Machine Learning":
+        "Python, Pandas, NumPy, Scikit-learn",
+
+        "Mobile Application":
+        "Flutter, Dart, Firebase",
+
+        "Data Analytics":
+        "Python, SQL, Power BI, Excel"
+    };
+
+    document.getElementById("technology").innerHTML =
+    "<h3>Recommended Tech Stack</h3>" +
+    suggestions[projectType];
+}
+
+function updateProgress() {
+
+    let checkboxes = document.querySelectorAll(
+        "#tasks input[type='checkbox']"
+    );
+
+    let completed = 0;
+
+    checkboxes.forEach(box => {
+        if(box.checked) completed++;
+    });
+
+    let percentage = checkboxes.length === 0
+        ? 0
+        : Math.round((completed / checkboxes.length) * 100);
+
+    document.getElementById("bar").style.width =
+    percentage + "%";
+
+    document.getElementById("percentage").innerText =
+    percentage + "% Completed";
+}
+
+function askAI() {
+
+    let question = document.getElementById("question").value;
+
+    if(question.trim() === "") {
+        alert("Please enter a question!");
+        return;
+    }
+
+    let response =
+    "I am your AI Software Engineer Assistant. " +
+    "For your project, first understand the requirements, " +
+    "choose suitable technologies, write clean code, " +
+    "and test every feature. Your question: " + question;
+
+    document.getElementById("answer").innerText = response;
+}
+
+</script>
+
+</body>
+</html>
